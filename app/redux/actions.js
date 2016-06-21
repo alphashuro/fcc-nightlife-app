@@ -8,9 +8,9 @@ export const login = () => {
 
 };
 
- const logoutRequest = () => ({ type: types.LOGOUT_REQUEST });
- const logoutSuccess = () => ({ type: types.LOGOUT_SUCCESS });
- const logoutFailure = error => ({ type: types.LOGOUT_ERROR, error });
+const logoutRequest = () => ({ type: types.LOGOUT_REQUEST });
+const logoutSuccess = () => ({ type: types.LOGOUT_SUCCESS });
+const logoutFailure = error => ({ type: types.LOGOUT_ERROR, error });
 
 export const logout = () => {
 
@@ -32,25 +32,25 @@ export const searchBarsNearLoc = location => {
 
 };
 
- const goingToBarRequest = () => ({ type: types.GOING_TO_BAR_REQUEST });
- const goingToBarSuccess = barId => ({ type: types.GOING_TO_BAR_SUCCESS, barId });
- const goingToBarFailure = error => ({ type: types.GOING_TO_BAR_ERROR, error });
+const goingToBarRequest = () => ({ type: types.GOING_TO_BAR_REQUEST });
+const goingToBarSuccess = barId => ({ type: types.GOING_TO_BAR_SUCCESS, barId });
+const goingToBarFailure = error => ({ type: types.GOING_TO_BAR_ERROR, error });
 
 export const goingToBar = barId => {
 
 };
 
- const notGoingToBarRequest = () => ({ type: types.NOT_GOING_TO_BAR_REQUEST });
- const notGoingToBarSuccess = barId => ({ type: types.NOT_GOING_TO_BAR_SUCCESS, barId });
- const notGoingToBarFailure = error => ({ type: types.NOT_GOING_TO_BAR_ERROR, error });
+const notGoingToBarRequest = () => ({ type: types.NOT_GOING_TO_BAR_REQUEST });
+const notGoingToBarSuccess = barId => ({ type: types.NOT_GOING_TO_BAR_SUCCESS, barId });
+const notGoingToBarFailure = error => ({ type: types.NOT_GOING_TO_BAR_ERROR, error });
 
 export const notGoingToBar = barId => {
 
 };
 
- const getBarsGoingToRequest = () => ({ type: types.BARS_GOING_TO_REQUEST });
- const getBarsGoingToSuccess = bars => ({ type: types.BARS_GOING_TO_SUCCESS, bars });
- const getBarsGoingToFailure = error => ({ type: types.BARS_GOING_TO_ERROR, error });
+const getBarsGoingToRequest = () => ({ type: types.BARS_GOING_TO_REQUEST });
+const getBarsGoingToSuccess = bars => ({ type: types.BARS_GOING_TO_SUCCESS, bars });
+const getBarsGoingToFailure = error => ({ type: types.BARS_GOING_TO_ERROR, error });
 
 export const getBarsGoingTo = () => {
 
