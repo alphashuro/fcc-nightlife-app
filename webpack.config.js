@@ -7,7 +7,7 @@ module.exports = {
 	},
 	module: {
 		loaders: [
-			{ test: /\.jsx?$/, loader: 'babel-loader', exclude: /node_modules/, query: { "presets": ["es2016", "stage-0", "react"] } },
+			{ test: /\.jsx?$/, loader: 'babel-loader', exclude: /node_modules/ },
 			{ test: /\.scss$/, loader: 'style!css?modules!sass' },
 		]
 	}
