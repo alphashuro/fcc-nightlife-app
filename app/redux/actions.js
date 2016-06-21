@@ -16,20 +16,50 @@ export const logout = () => {
 
 };
 
- const searchBarsNearMeRequest = () => ({ type: types.BARS_NEAR_ME_REQUEST });
- const searchBarsNearMeSuccess = bars => ({ type: types.BARS_NEAR_ME_SUCCESS, bars });
- const searchBarsNearMeFailure = error => ({ type: types.BARS_NEAR_ME_ERROR, error });
+const searchUrl = `https://api.foursquare.com/v2/venues/search?client_id=${clientId}&client_secret=${clientSecret}&&v=20140806&m=foursquare&categoryId=4bf58dd8d48988d116941735`;
+
+const searchBarsNearMeRequest = () => ({ type: types.BARS_NEAR_ME_REQUEST });
+const searchBarsNearMeSuccess = bars => ({ type: types.BARS_NEAR_ME_SUCCESS, bars });
+const searchBarsNearMeFailure = error => ({ type: types.BARS_NEAR_ME_ERROR, error });
 
 export const searchBarsNearMe = ({ latitude, longitude }) => {
-
+	return async dispatch => {
+		dispatch(searchBarsNearMeRequest());
+		try {
+			const searchBarsNearMeUrl = `${searchUrl}&ll=${latitude},${longitude}`;
+			const response = await fetch(searchBarsNearMeUrl);
+			const { meta: { code }, response: { venues: bars } } = await response.json();
+			if (code !== 200) {
+				dispatch(searchBarsNearMeFailure('Failed to fetch data, server error occured'));
+			}
+			dispatch(searchBarsNearMeSuccess(bars));
+		} catch (e) {
+			console.error(e);
+			dispatch(searchBarsNearMeFailure('Failed to fetch data, client error occured.'));
+		}
+	};
 };
 
- const searchBarsNearLocRequest = () => ({ type: types.BARS_NEAR_LOC_REQUEST });
- const searchBarsNearLocSuccess = bars => ({ type: types.BARS_NEAR_LOC_SUCCESS, bars });
- const searchBarsNearLocFailure = error => ({ type: types.BARS_NEAR_LOC_ERROR, error });
+const searchBarsNearLocRequest = () => ({ type: types.BARS_NEAR_LOC_REQUEST });
+const searchBarsNearLocSuccess = bars => ({ type: types.BARS_NEAR_LOC_SUCCESS, bars });
+const searchBarsNearLocFailure = error => ({ type: types.BARS_NEAR_LOC_ERROR, error });
 
-export const searchBarsNearLoc = location => {
-
+export const searchBarsNearLocation = location => {
+	return async dispatch => {
+		dispatch(searchBarsNearLocRequest());
+		try {
+			const searchBarsNearLocUrl = `${searchUrl}&near=${location}`;
+			const response = await fetch(searchBarsNearLocUrl);
+			const { meta: { code }, response: { venues: bars } } = await response.json();
+			if (code !== 200) {
+				dispatch(searchBarsNearLocFailure('Failed to fetch data, server error occured'));
+			}
+			dispatch(searchBarsNearLocSuccess(bars));
+		} catch (e) {
+			console.error(e);
+			dispatch(searchBarsNearLocFailure('Failed to fetch data, client error occured.'));
+		}
+	};
 };
 
 const goingToBarRequest = () => ({ type: types.GOING_TO_BAR_REQUEST });
