@@ -1,24 +1,7 @@
 import { combineReducers } from 'redux';
 import * as types from './action-types';
 
-export const initialState = {
-	auth: {
-		fetching: false,
-		token: null,
-		loggedIn: false,
-		error: null,
-	},
-	barsNearMe: {
-		fetching: false,
-		items: [],
-		error: null,
-	},
-	barsGoingTo: {
-		fetching: false,
-		items: [],
-		error: null,
-	},
-};
+import initialState from './initial-state';
 
 function auth(state = initialState.auth, action) {
 	switch(action.type) {
