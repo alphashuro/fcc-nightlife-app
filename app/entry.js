@@ -9,6 +9,7 @@ const container = document.getElementById('app');
 
 if (window.location.hash) {
 	const [_, access_token] = window.location.hash.split('=');
+	window.location.hash = '';
 	localStorage.setItem('token', access_token);
 	store.dispatch(login());
 }
