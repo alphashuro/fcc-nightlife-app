@@ -87,7 +87,32 @@ const goingToBarSuccess = barId => ({ type: types.GOING_TO_BAR_SUCCESS, barId })
 const goingToBarFailure = error => ({ type: types.GOING_TO_BAR_ERROR, error });
 
 export const goingToBar = barId => {
+	return async (dispatch, getState) => {
+		dispatch(goingToBarRequest());
+		try {
+			const {auth: {token}} = getState();
+			if (!token) {
+				console.log('not logged in, dispatching login');
+				return dispatch(login(() => {
+					dispatch(goingToBar(barId));
+				}));
+			};
 
+			const checkinUrl = `https://api.foursquare.com/v2/checkins/add?v=20160622&m=swarm&venueId=${barId}&oauth_token=${token}`;
+
+			const res = await fetch(checkinUrl, {method: 'POST'});
+			const {meta: {code}, response} = await res.json();
+			if (code !== 200) {
+				dispatch(goingToBarFailure('Server error.'));
+				return;
+			}
+			const { checkin: {venue} } = response;
+			dispatch(goingToBarSuccess(venue.id));
+		} catch (e) {
+			console.error(e);
+			dispatch(goingToBarFailure('Error checking in to bar.'));
+		}
+	};
 };
 
 const notGoingToBarRequest = () => ({ type: types.NOT_GOING_TO_BAR_REQUEST });
