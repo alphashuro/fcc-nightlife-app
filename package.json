@@ -5,6 +5,7 @@
   "main": "index.html",
   "scripts": {
     "build": "webpack --colors --progress",
+    "postbuild": "cp index.html build/index.html",
     "start": "webpack-dev-server --colors --progress",
     "test": "mocha --compilers js:babel-register --require babel-polyfill"
   },
