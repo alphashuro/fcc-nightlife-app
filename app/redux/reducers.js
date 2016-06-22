@@ -110,11 +110,8 @@ function barsGoingTo(state = initialState.barsGoingTo, action) {
 			return {
 				...state,
 				items: [
-					...state.items.filter(bar => bar.id !== action.barId),
-					{ 
-						id: action.barId,
-						loading: false,
-					}
+					...state.items.filter(bar => bar.id !== action.bar.id),
+					action.bar,
 				]
 			};
 		case types.GOING_TO_BAR_FAILURE:

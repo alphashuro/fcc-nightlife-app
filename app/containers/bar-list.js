@@ -3,15 +3,19 @@ import BarList from '../components/bar-list';
 import { goingToBar, notGoingToBar, getBarsGoingTo } from '../redux/actions';
 
 export default connect(
-	({auth: { token }, barsNearMe: { items, loading }, barsGoingTo}) => {
-		const bars = items.map(({id, name}) => ({
-			id,
-			name,
-			going: !!token && barsGoingTo.items.some(bar => bar.id === id),
-		}));
+	state => {
+		const barsGoingTo = state.barsGoingTo.items.map(bar => ({ ...bar, going: true }));
+		const barsNotGoingTo = state.barsNearMe.items.filter(bar => barsGoingTo.some(b => b.id !== bar.id));
+		const bars = [ ...barsGoingTo, ...barsNotGoingTo ];
+		const withoutDuplicates = [];
+		bars.forEach(bar => {
+			if (withoutDuplicates.some(b => b.id === bar.id)) return;
+			if (!bar.name) return;
+			withoutDuplicates.push(bar);
+		});
 		return {
-			bars,
-			loading,
+			bars: withoutDuplicates,
+			loading: state.barsNearMe.loading,
 		};
 	},
 	dispatch => ({

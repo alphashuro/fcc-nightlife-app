@@ -63,6 +63,13 @@ export const searchBarsNearMe = ({ latitude, longitude }) => {
 			if (code !== 200) {
 				dispatch(searchBarsNearMeFailure('Failed to fetch data, server error occured'));
 			}
+			const withoutDuplicates = [];
+			bars.forEach(bar => {
+				if (withoutDuplicates.some(b => b.id === bar.id)) {
+					return;
+				}
+				withoutDuplicates.push(bar);
+			});
 			dispatch(searchBarsNearMeSuccess(bars));
 		} catch (e) {
 			console.error(e);
@@ -94,7 +101,7 @@ export const searchBarsNearLocation = location => {
 };
 
 const goingToBarRequest = () => ({ type: types.GOING_TO_BAR_REQUEST });
-const goingToBarSuccess = barId => ({ type: types.GOING_TO_BAR_SUCCESS, barId });
+const goingToBarSuccess = bar => ({ type: types.GOING_TO_BAR_SUCCESS, bar });
 const goingToBarFailure = error => ({ type: types.GOING_TO_BAR_ERROR, error });
 
 export const goingToBar = barId => {
@@ -118,7 +125,7 @@ export const goingToBar = barId => {
 				return;
 			}
 			const { checkin: {venue} } = response;
-			dispatch(goingToBarSuccess(venue.id));
+			dispatch(goingToBarSuccess(venue));
 		} catch (e) {
 			console.error(e);
 			dispatch(goingToBarFailure('Error checking in to bar.'));
@@ -130,8 +137,18 @@ const notGoingToBarRequest = () => ({ type: types.NOT_GOING_TO_BAR_REQUEST });
 const notGoingToBarSuccess = barId => ({ type: types.NOT_GOING_TO_BAR_SUCCESS, barId });
 const notGoingToBarFailure = error => ({ type: types.NOT_GOING_TO_BAR_ERROR, error });
 
+/**
+ * Removing checkins is not supported by the foursquare api
+ */
 export const notGoingToBar = barId => {
-
+	return async dispatch => {
+		// dispatch(notGoingToBarRequest());
+		try {
+		} catch (e) {
+			console.error(e);
+			dispatch(notGoingToBarFailure('Error checking in to bar.'));
+		}
+	};
 };
 
 const getBarsGoingToRequest = () => ({ type: types.BARS_GOING_TO_REQUEST });
@@ -139,5 +156,35 @@ const getBarsGoingToSuccess = bars => ({ type: types.BARS_GOING_TO_SUCCESS, bars
 const getBarsGoingToFailure = error => ({ type: types.BARS_GOING_TO_ERROR, error });
 
 export const getBarsGoingTo = () => {
+	return async (dispatch, getState) => {
+		dispatch(getBarsGoingToRequest());
 
+		try {
+			const {auth: {token}} = getState();
+			if (!token) {
+				return dispatch(login());
+			}
+
+			const checkinsUrl = `https://api.foursquare.com/v2/users/self/checkins?v=20160622&m=swarm&oauth_token=${token}`;
+
+			const res = await fetch(checkinsUrl);
+			const {meta: {code}, response} = await res.json();
+			if (code !== 200) {
+				dispatch(getBarsGoingToFailure('Server error.'));
+				return;
+			}
+			const bars = response.checkins.items.map(checkin => checkin.venue);
+			const withoutDuplicates = [];
+			bars.forEach(bar => {
+				if (withoutDuplicates.some(b => b.id === bar.id)) {
+					return;
+				}
+				withoutDuplicates.push(bar);
+			});
+			dispatch(getBarsGoingToSuccess(withoutDuplicates));
+		} catch (e) {
+			console.error(e);
+			dispatch(getBarsGoingToFailure(e));
+		}
+	};
 };

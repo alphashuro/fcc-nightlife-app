@@ -8,13 +8,9 @@ const BarList = ({loading, bars, handleGoingToBar, handleNotGoingToBar}) => (
 				<p>Loading</p>
 				) : (
 				<ul> {
-					bars.map(({id, name, going}) => <li>
+					bars.map(({id, name, going}) => <li key={id}>
 						{name}
-						{ going ? (
-							<button onClick={ () => handleNotGoingToBar(id) }>Not Going</button>
-						) : (
-							<button onClick={ () =>  handleGoingToBar(id) }>Going</button>
-						) }
+							<button onClick={ () =>  handleGoingToBar(id) } disabled={going}>Going</button>
 					</li>)} 
 				</ul>
 			)}
