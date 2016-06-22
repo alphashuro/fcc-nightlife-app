@@ -1,10 +1,12 @@
 import React from 'react';
 
+import styles from './auth.css';
+
 const Auth = ({loggedIn, handleLogin, handleLogout}) => {
 	return loggedIn ? (
-		<button onClick={() => handleLogout() }>Logout</button>
+		<button className={styles.login} onClick={() => handleLogout() }>Logout</button>
 	) : (
-		<button onClick={() => handleLogin() }>Login</button>
+		<button className={styles.login} onClick={() => handleLogin() }>Login</button>
 	);
 };
 

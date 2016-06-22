@@ -1,0 +1,19 @@
+.list {
+	list-style: none;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.bar {
+	box-shadow: 0 2px 5px black;
+	width: 200px;
+	margin: 10px;
+	padding: 10px;
+}
+
+.going {
+	color: green;
+}
+
+.notGoing {
+}	
