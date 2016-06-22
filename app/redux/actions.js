@@ -1,11 +1,31 @@
 import * as types from './action-types';
 
+const clientId = 'LLI4XBMMLXNDUXNXFRFEZTIC25RBMKTUTHNF4PJPVXRAMDIF';
+const clientSecret = 'HITTKTZOV3JO3KI34OCDGBVLJJGIEDNKU5EY4TTUZIKYGNTT';
+
 const loginRequest = () => ({ type: types.LOGIN_REQUEST });
 const loginSuccess = token => ({ type: types.LOGIN_SUCCESS, token });
 const loginFailure = error => ({ type: types.LOGIN_ERROR, error });
 
-export const login = () => {
+export const login = cb => {
+	return async dispatch => {
+		dispatch(loginRequest());
+		
+		try {
+			const token = localStorage.getItem('token');
+			if (token) {
+				dispatch(loginSuccess(token));
+				cb && cb();
+				return;
+			}
 
+			const authUrl = `https://foursquare.com/oauth2/authenticate?response_type=token&client_id=${clientId}&redirect_uri=http://localhost:8080`;
+			window.location = authUrl;
+		} catch (e) {
+			console.error(e);
+			dispatch(loginFailure(e));
+		}
+	};
 };
 
 const logoutRequest = () => ({ type: types.LOGOUT_REQUEST });
