@@ -20,7 +20,7 @@ export const login = cb => {
 				return;
 			}
 
-			const authUrl = `https://foursquare.com/oauth2/authenticate?response_type=token&client_id=${clientId}&redirect_uri=http://localhost:8080`;
+			const authUrl = `https://foursquare.com/oauth2/authenticate?response_type=token&client_id=${clientId}&redirect_uri=${window.location.href}`;
 			window.location = authUrl;
 		} catch (e) {
 			console.error(e);
