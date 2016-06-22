@@ -6,10 +6,7 @@ import mainReducer from './reducers';
 const store = createStore(
 	mainReducer, 
 	initialState,
-	compose(
-    applyMiddleware(thunk),
-		window.devToolsExtension && window.devToolsExtension()
-	)
+  applyMiddleware(thunk)
 );
 
 export default store;
