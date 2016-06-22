@@ -5,13 +5,13 @@ import initialState from './initial-state';
 
 function auth(state = initialState.auth, action) {
 	switch(action.type) {
-		case types.AUTH_REQUEST:
+		case types.LOGIN_REQUEST:
 			return {
 				...state,
 				fetching: true,
 				error: null,
 			};
-		case types.AUTH_SUCCESS:
+		case types.LOGIN_SUCCESS:
 			return {
 				...state,
 				fetching: false,
@@ -19,7 +19,7 @@ function auth(state = initialState.auth, action) {
 				token: action.token,
 				error: null,
 			};
-		case types.AUTH_ERROR:
+		case types.LOGIN_ERROR:
 			return {
 				...state,
 				fetching: false,
