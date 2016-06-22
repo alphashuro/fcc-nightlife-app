@@ -4,9 +4,11 @@
   "description": "FCC Nightlife Coordination App",
   "main": "index.html",
   "scripts": {
+  	"clean": "rm -rf build",
+  	"prebuild": "npm run clean",
     "build": "webpack --colors --progress",
     "postbuild": "cp index.html build/index.html",
-    "start": "webpack-dev-server --colors --progress",
+    "start": "npm run build && webpack-dev-server --colors --progress",
     "test": "mocha --compilers js:babel-register --require babel-polyfill"
   },
   "keywords": [
