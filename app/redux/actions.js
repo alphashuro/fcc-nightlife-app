@@ -15,6 +15,7 @@ export const login = cb => {
 			const token = localStorage.getItem('token');
 			if (token) {
 				dispatch(loginSuccess(token));
+				dispatch(getBarsGoingTo());
 				cb && cb();
 				return;
 			}
@@ -33,7 +34,17 @@ const logoutSuccess = () => ({ type: types.LOGOUT_SUCCESS });
 const logoutFailure = error => ({ type: types.LOGOUT_ERROR, error });
 
 export const logout = () => {
+	return dispatch => {
+		dispatch(logoutRequest());
 
+		try {
+			localStorage.setItem('token', '');
+			dispatch(logoutSuccess());
+		} catch (e) {
+			console.error(e);
+			dispatch(logoutFailure(e));
+		}
+	}
 };
 
 const searchUrl = `https://api.foursquare.com/v2/venues/search?client_id=${clientId}&client_secret=${clientSecret}&&v=20140806&m=foursquare&categoryId=4bf58dd8d48988d116941735`;

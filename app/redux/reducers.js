@@ -27,6 +27,22 @@ function auth(state = initialState.auth, action) {
 				token: null,
 				error: action.error,
 			};
+		case types.LOGOUT_REQUEST:
+			return {
+				...state,
+				fetching: true,
+			};
+		case types.LOGOUT_SUCCESS:
+			return {
+				...state,
+				loggedIn: false,
+				token: null,
+			};
+		case types.LOGOUT_ERROR:
+			return {
+				...state,
+				error: action.error,
+			};
 		default:
 			return state;
 	}
